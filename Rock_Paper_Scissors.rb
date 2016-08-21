@@ -3,6 +3,7 @@ $yourLife = 10;
 $bossLife = 10;
 $yourHP = "";
 $bossHP = "";
+$isGameOver = false;
 
 # 清除Terminal的畫面
 def ClearConsole()
@@ -47,12 +48,19 @@ end
 #計算體力值輸出為血條格式
 def HP(iLife, iInverse)
     _HP = "";
-   for i in 1..10
-        if (i <= iLife)
-            _HP += iInverse ? "|" : " ";
-        else
-            _HP += iInverse ? " " : "|";
-        end
+    _Space = "";
+    for i in 1..iLife
+        _HP += "|";
+    end
+
+    for i in 1..(10 - iLife)
+        _Space += " ";
+    end
+
+    if iInverse
+        _HP += _Space;
+    else
+        _HP = _Space + _HP;
     end
     return _HP; 
 end
@@ -105,8 +113,15 @@ def NextStep()#iYouLife, iBossLife)
     _Input = gets.chomp;
 
     if ($yourLife <= 0) || ($bossLife <= 0)
-        $yourLife = 10;
-        $bossLife = 10;
+        if ($isGameOver)
+            $yourLife = 10;
+            $bossLife = 10;
+            $isGameOver = false;
+        else
+            ClearConsole();
+            Render();
+            $isGameOver = true;
+        end
     end
 end
 
